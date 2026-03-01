@@ -1,0 +1,29 @@
+[project]
+name = "theboringai"
+version = "1.0.0"
+description = "TheBoringAI — Machine Learning & Deep Learning animated with Manim"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+
+dependencies = [
+    "manim>=0.18.0",
+    "numpy>=1.21.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "ruff",
+]
+
+[tool.black]
+line-length = 100
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.ruff]
+line-length = 100
