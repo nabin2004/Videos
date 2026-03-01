@@ -1,0 +1,17 @@
+output/
+media/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.env
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+*.mp4
+*.mov
+*.webm
+*.png
+!assets/**/*.png
