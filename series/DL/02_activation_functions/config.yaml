@@ -1,0 +1,8 @@
+# Series video project config
+episode: 2
+series: DL
+title: "Activation Functions"
+description: "Why non-linearity matters"
+tags: ["activation", "ReLU", "sigmoid", "tanh"]
+duration_target: "5-8 min"
+status: "ready"

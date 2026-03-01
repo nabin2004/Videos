@@ -1,5 +1,13 @@
 output/
 media/
+exports/youtube_1080p/
+exports/youtube_4k/
+exports/shorts/
+exports/facebook/
+exports/instagram/
+exports/twitter/
+exports/transparent/
+exports/gif_preview/
 __pycache__/
 *.pyc
 *.pyo
@@ -13,5 +21,9 @@ venv/
 *.mp4
 *.mov
 *.webm
+*.gif
 *.png
 !assets/**/*.png
+!assets/**/*.svg
+!exports/.gitkeep
+assets/catalog.json

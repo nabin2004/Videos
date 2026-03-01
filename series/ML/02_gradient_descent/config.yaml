@@ -1,0 +1,8 @@
+# Series video project config
+episode: 2
+series: ML
+title: "Gradient Descent"
+description: "How neural networks learn by following the slope"
+tags: ["gradient descent", "optimization", "learning rate", "loss landscape"]
+duration_target: "5-8 min"
+status: "ready"

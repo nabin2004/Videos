@@ -1,0 +1,8 @@
+# Series video project config
+episode: 4
+series: DL
+title: "Attention Mechanism"
+description: "How transformers think"
+tags: ["attention", "transformer", "self-attention", "QKV"]
+duration_target: "8-12 min"
+status: "ready"

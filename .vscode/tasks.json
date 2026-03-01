@@ -1,0 +1,89 @@
+{
+    // TheBoringAI — VS Code Tasks for Manim
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Manim: Preview Scene",
+            "type": "shell",
+            "command": "manim -ql --preview ${file} ${input:sceneClass}",
+            "group": "build",
+            "presentation": { "reveal": "always", "panel": "shared" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Manim: Render HD",
+            "type": "shell",
+            "command": "manim -qh ${file} ${input:sceneClass}",
+            "group": "build",
+            "presentation": { "reveal": "always", "panel": "shared" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Manim: Render 4K",
+            "type": "shell",
+            "command": "manim -qp --fps 60 ${file} ${input:sceneClass}",
+            "group": "build",
+            "presentation": { "reveal": "always", "panel": "shared" },
+            "problemMatcher": []
+        },
+        {
+            "label": "Manim: Interactive (OpenGL)",
+            "type": "shell",
+            "command": "python tools/interactive.py ${file} ${input:sceneClass}",
+            "group": "build",
+            "presentation": { "reveal": "always", "panel": "dedicated" },
+            "problemMatcher": [],
+            "isBackground": true
+        },
+        {
+            "label": "Export: YouTube 1080p",
+            "type": "shell",
+            "command": "python tools/export.py --scene ${file} --class ${input:sceneClass} --profile youtube_1080p",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Export: YouTube Shorts",
+            "type": "shell",
+            "command": "python tools/export.py --scene ${file} --class ${input:sceneClass} --profile shorts",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Export: All Profiles",
+            "type": "shell",
+            "command": "python tools/export.py --scene ${file} --class ${input:sceneClass} --profile all",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Render All Episodes",
+            "type": "shell",
+            "command": "make render-all",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Project Status",
+            "type": "shell",
+            "command": "make status",
+            "group": "none",
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean Output",
+            "type": "shell",
+            "command": "make clean",
+            "group": "none",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "sceneClass",
+            "description": "Scene class name to render",
+            "type": "promptString",
+            "default": ""
+        }
+    ]
+}

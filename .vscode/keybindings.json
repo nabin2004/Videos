@@ -1,0 +1,59 @@
+{
+    // TheBoringAI — VS Code Keybindings for Manim Interactive Workflow
+    // Copy these into your VS Code keybindings.json (Cmd+K Cmd+S → Open Keyboard Shortcuts JSON)
+    // Or use: Preferences: Open Keyboard Shortcuts (JSON)
+
+    "keybindings": [
+        {
+            "key": "shift+super+r",
+            "command": "workbench.action.terminal.sendSequence",
+            "args": {
+                "text": "python tools/interactive.py \"${file}\" $(grep -oP 'class \\K\\w+Scene' \"${file}\" | head -1)\n"
+            },
+            "when": "editorTextFocus && resourceExtname == '.py'",
+            "_comment": "Run current scene in OpenGL interactive mode"
+        },
+        {
+            "key": "super+r",
+            "command": "editor.action.insertSnippet",
+            "args": {
+                "snippet": "self.interactive_embed()  # ▶ CHECKPOINT — replay to here"
+            },
+            "when": "editorTextFocus && resourceExtname == '.py'",
+            "_comment": "Insert checkpoint (replay to this point in interactive mode)"
+        },
+        {
+            "key": "super+alt+r",
+            "command": "editor.action.insertSnippet",
+            "args": {
+                "snippet": "self.wait_until_bookmark(\"recorded_cp_${TM_LINE_NUMBER}\")  # 🔴 RECORDED CHECKPOINT"
+            },
+            "when": "editorTextFocus && resourceExtname == '.py'",
+            "_comment": "Insert recorded checkpoint (records animation up to this point)"
+        },
+        {
+            "key": "super+ctrl+r",
+            "command": "editor.action.insertSnippet",
+            "args": {
+                "snippet": "self.skip_animations = False  # ⏭ SKIPPED CHECKPOINT — animations resume here"
+            },
+            "when": "editorTextFocus && resourceExtname == '.py'",
+            "_comment": "Insert skipped checkpoint (fast-forward to here, then resume)"
+        },
+        {
+            "key": "super+e",
+            "command": "workbench.action.terminal.sendSequence",
+            "args": {
+                "text": "\u0003"
+            },
+            "when": "terminalFocus",
+            "_comment": "Exit interactive Manim (sends Ctrl+C to terminal)"
+        },
+        {
+            "key": "super+alt+/",
+            "command": "editor.foldAllBlockComments",
+            "when": "editorTextFocus",
+            "_comment": "Fold all block comments"
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+# Series video project config
+episode: 3
+series: ML
+title: "Loss Functions"
+description: "Measuring how wrong your model is"
+tags: ["loss", "MSE", "cross-entropy", "training curve"]
+duration_target: "5-8 min"
+status: "ready"

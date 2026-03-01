@@ -1,0 +1,8 @@
+# Series video project config
+episode: 1
+series: ML
+title: "What is a Neural Network?"
+description: "The fundamental building block of deep learning"
+tags: ["neural network", "neuron", "layers", "forward pass"]
+duration_target: "5-8 min"
+status: "ready"

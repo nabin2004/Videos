@@ -1,0 +1,8 @@
+# Series video project config
+episode: 3
+series: DL
+title: "Convolutional Neural Networks"
+description: "Teaching machines to see patterns in images"
+tags: ["CNN", "convolution", "feature maps", "pooling"]
+duration_target: "8-12 min"
+status: "ready"

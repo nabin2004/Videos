@@ -1,0 +1,49 @@
+{
+    // TheBoringAI — VS Code Settings for Manim Development
+    "python.defaultInterpreterPath": "python3",
+
+    // Editor
+    "editor.fontSize": 14,
+    "editor.fontFamily": "'JetBrains Mono', 'Fira Code', monospace",
+    "editor.fontLigatures": true,
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true,
+    "editor.rulers": [100],
+
+    // Python
+    "python.formatting.provider": "black",
+    "python.linting.ruffEnabled": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+
+    // Files
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/output": false,
+        "**/media": true
+    },
+    "files.associations": {
+        "*.manim": "python",
+        "manim.cfg": "ini"
+    },
+
+    // Terminal
+    "terminal.integrated.defaultProfile.linux": "zsh",
+
+    // Search
+    "search.exclude": {
+        "**/output": true,
+        "**/media": true,
+        "**/exports": true,
+        "**/__pycache__": true
+    },
+
+    // Manim-specific tasks
+    "task.autoDetect": "off"
+}
