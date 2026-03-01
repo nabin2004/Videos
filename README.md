@@ -198,6 +198,15 @@ class MyScene(Scene):
 | **Watermark** | `.add()`, `.add_with_episode()`, `.progress_bar()` | Corner watermarks |
 | **SubscribeCTA** | `.popup()`, `.end_screen()` | Subscribe call-to-action |
 | **LowerThirds** | `.speaker()`, `.topic()`, `.source()` | Broadcaster-style info bars |
+| **OctopusCreature** | `.look_at()`, `.hold_items()`, `.change_mood()` | Playful 8-armed mascot for teaching |
+| **ProfessorOctopus** | *inherits* + glasses & mortarboard | Teacher / explainer variant |
+| **BabyOctopus** | *inherits* + oversized eyes | Curious / question-asker variant |
+| **NeuralOctopus** | `.pulse_tentacle()` | Tentacles as neural connections |
+| **DataOctopus** | `.label_tentacles()` | Labeled tentacles for data pipelines |
+| **OctopusAnimations** | `.entrance()`, `.wave_hello()`, `.present()`, `.juggle()` | Pre-built animation sequences |
+| **OctopusTeaches** | `.concept()`, `.step_by_step()`, `.vs()`, `.quiz()`, `.pipeline()` | High-level teaching helpers |
+
+> **Full octopus docs →** [docs/octopus.md](docs/octopus.md)
 
 ---
 
