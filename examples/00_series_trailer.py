@@ -56,10 +56,10 @@ C_LINEAR   = BRAND_ELECTRIC
 C_LOGISTIC = BRAND_PLASMA
 C_RIDGE    = BRAND_SOLAR
 C_LASSO    = BRAND_NOVA
-C_ELASTIC  = "#39FF14"    # neon green
-C_SVM      = "#FF073A"    # hot red
+C_ELASTIC  = "#B8C9A3"    # sage green
+C_SVM      = "#C05040"    # warm red
 C_TREE     = BRAND_SOLAR
-C_FOREST   = "#39FF14"
+C_FOREST   = "#B8C9A3"
 C_KNN      = BRAND_PLASMA
 
 
