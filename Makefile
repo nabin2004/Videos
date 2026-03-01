@@ -125,6 +125,16 @@ render-dl: ## Render all DL series episodes
 		fi; \
 	done
 
+.PHONY: render-examples
+render-examples: ## Render all example scenes (low quality)
+	@echo "  Rendering examples..."
+	@for f in examples/*.py; do \
+		echo "  → $$f"; \
+		CLASS=$$(grep -oP 'class \K\w+' "$$f" | head -1); \
+		$(MANIM) -ql "$$f" $$CLASS || true; \
+	done
+	@echo "  ✓ All examples rendered."
+
 # ─── Exporting ──────────────────────────────────────────────────────────────
 
 .PHONY: export

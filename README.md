@@ -210,6 +210,31 @@ class MyScene(Scene):
 
 ---
 
+## Examples
+
+Six runnable examples that demonstrate **every module** in the toolkit:
+
+| # | File | Scene Class | Demonstrates |
+|---|------|-------------|--------------|
+| 01 | `examples/01_brand_and_typography.py` | `BrandShowcase` | Palette, typography scale, math, data colors |
+| 02 | `examples/02_animations_and_layout.py` | `AnimationsShowcase` | fly_in, pop_in, pulse, neon_text, grid, metrics, bullets |
+| 03 | `examples/03_ml_components.py` | `MLComponentsShowcase` | Neural networks, forward/backprop, matrices, activations, loss, pipelines |
+| 04 | `examples/04_octopus_mascot.py` | `OctopusMascotShowcase` | All moods, 4 variations, tentacle interactions, teaching helpers |
+| 05 | `examples/05_video_components.py` | `VideoComponentsShowcase` | Opening → ChapterCard → LowerThirds → Bumper → PauseAndPonder → CTA → Closing |
+| 06 | `examples/06_full_mini_episode.py` | `MiniEpisode` | End-to-end mini episode combining everything |
+
+```bash
+# Render one example
+manim -ql examples/04_octopus_mascot.py OctopusMascotShowcase
+
+# Render all examples
+make render-examples
+```
+
+> See [examples/README.md](examples/README.md) for full docs.
+
+---
+
 ## Make Commands
 
 ```bash

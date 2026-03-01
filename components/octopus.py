@@ -278,7 +278,12 @@ class OctopusCreature(VGroup):
         return tentacles
 
     def _make_tentacle(self, start, angle, length, index):
-        """Build one wavy VMobject tentacle with tapered stroke."""
+        """Build one wavy VMobject tentacle with tapered stroke.
+
+        Taper is simulated by splitting the curve into short segments
+        with decreasing stroke widths — compatible with the Cairo renderer
+        which only supports scalar stroke widths per VMobject.
+        """
         curl = self.tentacle_curl
         pts = []
         for j in range(TENTACLE_RESOLUTION):
@@ -292,25 +297,22 @@ class OctopusCreature(VGroup):
             y -= wave * np.sin(angle)
             pts.append(np.array([x, y, 0.0]))
 
-        tentacle = VMobject()
-        tentacle.set_points_smoothly(pts)
+        # Build tapered tentacle as VGroup of short segments
+        n_segs = len(pts) - 1
+        base_w, tip_w = 4.5, 1.0
+        segments = VGroup()
+        for k in range(n_segs):
+            frac = k / max(n_segs - 1, 1)
+            w = base_w + (tip_w - base_w) * frac
+            seg = Line(pts[k], pts[k + 1], stroke_width=w, stroke_color=self.creature_color)
+            segments.add(seg)
 
-        # Taper width: thick at base, thin at tip
-        n_pts = tentacle.get_num_points()
-        if n_pts > 1:
-            widths = np.linspace(5.0, 1.2, n_pts)
-            try:
-                tentacle.set_stroke(color=self.creature_color, width=widths)
-            except Exception:
-                tentacle.set_stroke(color=self.creature_color, width=3.5)
-        else:
-            tentacle.set_stroke(color=self.creature_color, width=3.5)
-
-        # Metadata for interactions
-        tentacle.tip_point = np.array(pts[-1])
-        tentacle.base_point = np.array(pts[0])
-        tentacle.index = index
-        return tentacle
+        # Store as a VGroup but keep the metadata helpers expect
+        segments.tip_point = np.array(pts[-1])
+        segments.base_point = np.array(pts[0])
+        segments.index = index
+        segments._all_pts = pts  # kept for point_from_proportion fallback
+        return segments
 
     # ── Suckers (optional) ──────────────────────────────────────────────────
 
@@ -318,10 +320,14 @@ class OctopusCreature(VGroup):
         """Small circles along the inner side of each tentacle."""
         all_suckers = VGroup()
         for tentacle in self.tentacles:
+            pts = getattr(tentacle, '_all_pts', None)
+            if pts is None or len(pts) < 2:
+                continue
             n = 5
             for k in range(1, n + 1):
                 alpha = k / (n + 1)
-                pos = tentacle.point_from_proportion(alpha)
+                idx = int(alpha * (len(pts) - 1))
+                pos = pts[min(idx, len(pts) - 1)]
                 sucker = Circle(
                     radius=0.025 * (1 - 0.4 * alpha),
                     color=_shade(self.creature_color, 0.35),
@@ -403,7 +409,9 @@ class OctopusCreature(VGroup):
 
     def get_tentacle_tip(self, index):
         """World-space position of tentacle *index* tip."""
-        return self.get_tentacle(index).get_end()
+        tentacle = self.get_tentacle(index)
+        # The last segment's endpoint is the tip
+        return tentacle[-1].get_end()
 
     def get_all_tips(self):
         """List of all 8 tentacle tip positions."""
@@ -753,40 +761,26 @@ class NeuralOctopus(OctopusCreature):
     def _colorize_tentacles(self):
         palette = DATA_COLORS * ((NUM_TENTACLES // len(DATA_COLORS)) + 1)
         for i, tentacle in enumerate(self.tentacles):
-            n_pts = tentacle.get_num_points()
-            if n_pts > 1:
-                try:
-                    tentacle.set_stroke(
-                        color=palette[i],
-                        width=np.linspace(5.0, 1.2, n_pts),
-                    )
-                except Exception:
-                    tentacle.set_stroke(color=palette[i], width=3.5)
-            else:
-                tentacle.set_stroke(color=palette[i], width=3.5)
+            for seg in tentacle:
+                seg.set_stroke(color=palette[i])
 
     def pulse_tentacle(self, scene, index, color=BRAND_SOLAR, run_time=0.6):
         """Animate a glow pulse along tentacle *index*."""
         t = self.get_tentacle(index)
-        orig_color = t.get_stroke_color()
+        # Save original colors per-segment
+        orig_colors = [seg.get_stroke_color() for seg in t]
+        orig_widths = [seg.get_stroke_width() for seg in t]
         scene.play(
-            t.animate.set_stroke(color=color, width=8),
+            *[seg.animate.set_stroke(color=color, width=8) for seg in t],
             run_time=run_time / 2,
         )
-        n_pts = t.get_num_points()
-        try:
-            scene.play(
-                t.animate.set_stroke(
-                    color=orig_color,
-                    width=np.linspace(5.0, 1.2, max(n_pts, 2)),
-                ),
-                run_time=run_time / 2,
-            )
-        except Exception:
-            scene.play(
-                t.animate.set_stroke(color=orig_color, width=3.5),
-                run_time=run_time / 2,
-            )
+        scene.play(
+            *[
+                seg.animate.set_stroke(color=oc, width=ow)
+                for seg, oc, ow in zip(t, orig_colors, orig_widths)
+            ],
+            run_time=run_time / 2,
+        )
 
 
 class DataOctopus(OctopusCreature):
@@ -872,7 +866,7 @@ class OctopusAnimations:
                 t = octo.get_tentacle(idx)
                 anims.append(
                     Rotate(t, angle=0.35 * (-1 if idx < 4 else 1),
-                           about_point=t.get_start())
+                           about_point=t[0].get_start())
                 )
             scene.play(*anims, run_time=run_time / 2, rate_func=there_and_back)
 
@@ -934,7 +928,7 @@ class OctopusAnimations:
         positioned = octo.present_items(items)
         anims = [FadeIn(item, shift=DOWN * 0.3) for item in positioned]
         if title:
-            title_mob = brand_title(title, size=T_H2)
+            title_mob = brand_text(title, size=T_H2, color=ACCENT)
             title_mob.next_to(octo, UP, buff=0.3)
             anims.insert(0, FadeIn(title_mob, shift=UP * 0.2))
             positioned.add(title_mob)
@@ -1093,7 +1087,7 @@ class OctopusTeaches:
 
         content_x = -side[0] * 1.5  # opposite side
 
-        title_mob = brand_title(title, size=T_H2)
+        title_mob = brand_text(title, size=T_H2, color=ACCENT)
         title_mob.move_to(RIGHT * content_x + UP * 2.5)
         scene.play(FadeIn(title_mob, shift=DOWN * 0.2))
 
@@ -1184,7 +1178,7 @@ class OctopusTeaches:
         octo.move_to(UP * 2.0)
         OctopusAnimations.entrance(scene, octo)
 
-        q_mob = brand_text(question, size=T_H2, color=PRIMARY)
+        q_mob = brand_text(question, size=T_H2, color=ACCENT)
         q_mob.next_to(octo, DOWN, buff=0.4)
         scene.play(FadeIn(q_mob, shift=DOWN * 0.2))
         scene.wait(0.5)
